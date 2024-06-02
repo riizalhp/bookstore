@@ -1,122 +1,69 @@
-<?php
-include 'koneksi.php';
-
-?>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>UNIBOOKSTORE</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
-    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style1.css">
+    <title>Sign In</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100">
-<nav>  
-        <div class="brand">Unibookstore</div>
-        <a href="index.php">Home</a>
-        <a href="admin.php">Admin</a>
-        <a href="pengadaan.php">Pengadaan</a>
-    </nav>
-<body class="bg-gray-100">
-
-    <div class="container mx-auto p-8">
-        <h1 class="text-4xl font-bold mb-8 custom-text"  >Cari data buku atau penerbit masukkan ID anda!</h1>
-        <div class="mb-4 flex space-x-4">
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <input class="flex-1 appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="search_id" type="text" placeholder="ID Buku atau Penerbit">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" name="searchButton">Cari</button>
-            </form>
+<body>
+    <!-- cek pesan notifikasi -->
+    <?php
+    if (isset($_GET['pesan'])) {
+        if ($_GET['pesan'] == "gagal") { ?>
+            <div class="alert alert-danger" role="alert">
+                Login Failed! Your username or password is wrong!
+            </div>
+        <?php } else if ($_GET['pesan'] == "logout") { ?>
+            <div class="alert alert-success" role="alert">
+                Logout success!
+            </div>
+        <?php } else if ($_GET['pesan'] == "belum login") { ?>
+            <div class="alert alert-danger" role="alert">
+                You have to sign in to access main page!
+            </div>
+        <?php } else if ($_GET['pesan'] == "terdaftar") { ?>
+            <div class="alert alert-success" role="alert">
+                Your Registration is complete!
+            </div>
+        <?php } else if ($_GET['pesan'] == "berhasil") { ?>
+            <div class="alert alert-success" role="alert">
+                Your Password is changed! Try Now!
+            </div>
+    <?php }
+    }
+    ?>
+    <center>
+        <div class="form-container" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width:500px; margin:auto;">
+                <div class="row mb-4">
+                    <center>
+                        <h1>UNIBOOKSTORE</h1>
+                    </center>
+                </div>
+                <div class="form">
+                    <form method="POST" action="cek_login.php">
+                        <label for="username">Username</label>
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <input type="text" class="form-control" id="username" placeholder="Admin Name" name="username" required>
+                        </div>
+                        <label for="password">Password</label>
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Sign in</button>
+                    </form>
+                    <a href="signup.php" class="nav-link text-primary" style="margin-top:10px;">Sign Up</a>
+                </div>
+            </div>
         </div>
-        
-        <div class="mt-4">
-            <h2 class="text-2xl font-bold mb-4 custom-text">Data Buku</h2>
-            <table class="table-auto w-full border bg-white">
-                <thead>
-                    <tr>
-                        <th class="border px-4 py-2">ID Buku</th>
-                        <th class="border px-4 py-2">Kategori</th>
-                        <th class="border px-4 py-2">Nama Buku</th>
-                        <th class="border px-4 py-2">Tahun</th>
-                        <th class="border px-4 py-2">Harga</th>
-                        <th class="border px-4 py-2">Stok</th>
-                        <th class="border px-4 py-2">Penerbit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    
-                    
-                    // Handle search
-                    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["searchButton"])) {
-                        $searchTerm = mysqli_real_escape_string($koneksi, $_POST["search_id"]);
-                        $query = "SELECT * FROM buku WHERE id_buku LIKE '%$searchTerm%' OR kategori LIKE '%$searchTerm%' OR nama_buku LIKE '%$searchTerm%' OR harga LIKE '%$searchTerm%' OR stok LIKE '%$searchTerm%' OR penerbit LIKE '%$searchTerm%'";
-                    } else {
-                        $query = "SELECT * FROM buku";
-                    }
+    </center>
 
-                    $buku = mysqli_query($koneksi, $query);
-
-                    foreach ($buku as $row) {
-                        echo "<tr>
-                            <td class='border px-4 py-2'>" . $row['id_buku'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['kategori'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['nama_buku'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['tahun'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['harga'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['stok'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['penerbit'] . "</td>
-                        </tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold mb-4 custom-text">Data Penerbit</h2>
-            <table class="table-auto w-full border bg-white">
-                <thead>
-                    <tr>
-                        <th class="border px-4 py-2">ID Penerbit</th>
-                        <th class="border px-4 py-2">Nama</th>
-                        <th class="border px-4 py-2">Alamat</th>
-                        <th class="border px-4 py-2">Kota</th>
-                        <th class="border px-4 py-2">Telepon</th>
-                        <th class="border px-4 py-2">Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    // Handle search
-                    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["searchButton"])) {
-                        $searchTerm = mysqli_real_escape_string($koneksi, $_POST["search_id"]);
-                        $query = "SELECT * FROM penerbit WHERE id_penerbit LIKE '%$searchTerm%' OR nama LIKE '%$searchTerm%' OR alamat LIKE '%$searchTerm%' OR kota LIKE '%$searchTerm%' OR telepon LIKE '%$searchTerm%'";
-                    } else {
-                        $query = "SELECT * FROM penerbit";
-                    }
-
-                    $penerbit = mysqli_query($koneksi, $query);
-
-                    foreach ($penerbit as $row) {
-                        echo "<tr>
-                            <td class='border px-4 py-2'>" . $row['id_penerbit'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['nama'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['alamat'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['kota'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['telepon'] . "</td>
-                            <td class='border px-4 py-2'>" . $row['email'] . "</td>
-                        </tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

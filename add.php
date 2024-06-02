@@ -1,4 +1,8 @@
 <?php
+session_start();
+if (empty($_SESSION['username'])) {
+    header("location:index.php?pesan=belum_login");
+}
 include 'koneksi.php';
 // Fungsi untuk menambah buku
 ?>
@@ -17,7 +21,8 @@ include 'koneksi.php';
 <body class="no-background">
 <nav>
         <div class="brand">Unibookstore</div>
-        <a href="index.php">Home</a>
+        <a href="logout.php">Logout</a>
+        <a href="main.php">Home</a>
         <a href="admin.php">Admin</a>
         <a href="pengadaan.php">Pengadaan</a>
     </nav>

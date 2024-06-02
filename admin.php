@@ -1,6 +1,9 @@
 <?php
+session_start();
+if (empty($_SESSION['username'])) {
+    header("location:index.php?pesan=belum_login");
+}
 include 'koneksi.php';
-
 
 //fungsi tambahbuku
 function tambahBuku($data){
@@ -112,7 +115,8 @@ $penerbit = mysqli_query($koneksi, "SELECT * FROM penerbit");
 <body class="bg-gray-100">
 <nav>
         <div class="brand">Unibookstore</div>
-        <a href="index.php">Home</a>
+        <a href="logout.php">Logout</a>
+        <a href="main.php">Home</a>
         <a href="admin.php">Admin</a>
         <a href="pengadaan.php">Pengadaan</a>
     </nav>

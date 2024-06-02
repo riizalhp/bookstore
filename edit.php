@@ -1,4 +1,8 @@
 <?php
+session_start();
+if (empty($_SESSION['username'])) {
+    header("location:index.php?pesan=belum_login");
+}
 include 'koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
